@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'terminal-table/import'
+
 dir = Dir.pwd
 
 langs = {
@@ -55,54 +58,6 @@ langs = {
 
 tests = {:random => {}, :regexp => {}, :md5 => {}}
 
-class AsciiTable
-  attr_accessor :data, :header, :lineup
-  
-  def build
-    
-    max_len = {}
-    self.data.each do |row|
-      j = 0
-      row.each do |string|
-        if max_len[j].nil? or max_len[j] < string.to_s.length
-          max_len[j] = string.to_s.length
-          j += 1
-        end
-      end
-    end
-    
-    puts ' ' + '_' * (max_len.values.inject(0){ |sum, i| sum + i + 2 } + max_len.values.length - 1)
-    i = 0
-    self.data.each do |row|
-      str = '|'
-      j = 0
-      row.each do |string|
-        str << format(string.to_s, max_len[j]) + '|'
-        j += 1
-      end
-      puts str
-      i += 1
-      if i == 1 and self.header
-        str = '|'
-        max_len.each{ |_, i| str << '=' * (i + 2) + '|' }
-        puts str
-      elsif i < data.length and self.lineup
-        str = '|'
-        max_len.each{ |_, i| str << '-' * (i + 2) + '|' }
-        puts str
-      end
-    end
-    str = '|'
-    max_len.each{ |_, i| str << '_' * (i + 2) + '|' }
-    puts str
-  end
-  
-  def format string, length
-    ' ' + string + ' ' * (length - string.length + 1)
-  end
-end
-
-
 langs.each do |name, info|
   if `whereis #{name.to_s}`
     if info[:version][:command].length > 0
@@ -129,11 +84,12 @@ langs.each do |name, info|
 end
 
 data = []
-data << [''] + langs.map{ |name, info| name.to_s + ' (' + info[:version][:number] + ')' }
-tests.each{ |test, results| data << [test.to_s] + results.map{ |i, v| v.to_s[0..5]}}
+data << 
+
 data << ['total'] + langs.map{ |name, info| info[:time].to_s[0..5] }
 
-at = AsciiTable.new
-at.data = data
-at.header = true
-at.build
+stat_table = table do |t|
+  t.headings = [''] + langs.map{ |name, info| name.to_s + ' (' + info[:version][:number] + ')' }
+  tests.each{ |test, results| t << [test.to_s] + results.map{ |i, v| v.to_s[0..5]}}
+end
+puts stat_table

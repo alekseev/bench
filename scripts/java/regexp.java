@@ -1,6 +1,6 @@
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Scanner;
-import java.util.regex.*;
 
 public class regexp {
 	public static void main(String args[]) throws IOException {
@@ -14,8 +14,8 @@ public class regexp {
 		} finally {
 			scanner.close();
 		}
-		for (int number = 1; number <= 1000000; number++) {
-			String[] r = text.toString().split("[a-z]");
+		for (int i = 1; i <= 1000000; i++) {
+			text.toString().split("[a-z]");
 		}
 	}
 }

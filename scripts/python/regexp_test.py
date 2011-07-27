@@ -1,7 +1,6 @@
 import re
 
-f = open('../../data/lorem.txt', 'r')
-text = f.read()
+text = open('../../data/lorem.txt', 'r').read()
 
 for i in range(1000000):
 	re.search('[a-zA-Z]', text)

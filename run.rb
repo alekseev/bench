@@ -71,6 +71,7 @@ langs.each do |name, info|
       file = test.to_s + info[:exec_ext]
       if File.exists? dir + '/' + path + test.to_s + info[:script_ext]
         Dir.chdir(dir + '/' + path)
+        puts "Running test \"#{test.to_s}\" with #{name.to_s}"
         time = Time.now
         `#{info[:exec_prefix]} #{file}`
         time = (Time.now - time).to_f
@@ -83,10 +84,12 @@ langs.each do |name, info|
   end
 end
 
+puts
+
 stat_table = table do |t|
   t.headings = [''] + langs.map{ |name, info| name.to_s + ' (' + info[:version][:number] + ')' }
-  tests.each{ |test, results| t << [test.to_s] + results.map{ |i, v| v.to_s[0..5]}}
-  t << ['total'] + langs.map{ |name, info| info[:time].to_s[0..5] }
+  tests.each{ |test, results| t << [test.to_s] + results.map{ |i, v| v.to_s[0..6]}}
+  t << ['total'] + langs.map{ |name, info| info[:time].to_s[0..6] }
 end
 
 puts stat_table

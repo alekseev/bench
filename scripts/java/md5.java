@@ -1,16 +1,14 @@
-import java.io.*;
-import java.util.*;
-import java.security.*;
+import java.io.UnsupportedEncodingException;
+import java.util.Random;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class md5 {
 	public static void main(String args[]) throws NoSuchAlgorithmException, UnsupportedEncodingException {
 		Random rnd = new Random();
 		MessageDigest md = MessageDigest.getInstance("MD5");
-		for (int number = 1; number <= 1000; number++) {
-			double x = rnd.nextDouble();
-			String xstring = Double.toString(x);
-			byte[] xbytes = xstring.getBytes("UTF-8");
-			byte[] thedigest = md.digest(xbytes);
+		for (int i = 1; i <= 1000000; i++) {
+			md.digest(Double.toString(rnd.nextDouble()).getBytes("UTF-8"));
 		}
 	}
 }

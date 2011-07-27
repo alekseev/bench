@@ -1,4 +1,4 @@
 require 'digest/md5'
-1000.times do
-  Digest::MD5.hexdigest(Random.rand(1000).to_s)
+1000000.times do
+  Digest::MD5.hexdigest(Random.rand(1000000).to_s)
 end

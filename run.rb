@@ -83,13 +83,10 @@ langs.each do |name, info|
   end
 end
 
-data = []
-data << 
-
-data << ['total'] + langs.map{ |name, info| info[:time].to_s[0..5] }
-
 stat_table = table do |t|
   t.headings = [''] + langs.map{ |name, info| name.to_s + ' (' + info[:version][:number] + ')' }
   tests.each{ |test, results| t << [test.to_s] + results.map{ |i, v| v.to_s[0..5]}}
+  t << ['total'] + langs.map{ |name, info| info[:time].to_s[0..5] }
 end
+
 puts stat_table

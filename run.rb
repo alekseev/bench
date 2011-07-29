@@ -109,7 +109,7 @@ puts
 
 stat_table = table do |t|
   t.headings = [''] + langs.map{ |name, info| name.to_s + ' (' + info[:version][:number] + ')' }
-  tests.each{ |test, results| t << [test.to_s] + results.map{ |i, v| v.to_s[0..6]}}
+  tests.each{ |test, results| t << [test.to_s] + results.map{ |i, v| v.to_s[0..6] } }
   t << ['total'] + langs.map{ |name, info| info[:time].to_s[0..6] }
 end
 

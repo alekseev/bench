@@ -1,6 +1,6 @@
 # Programming language benchmarker
 
-Currently tests Ruby, PHP, Java, Python and Perl
+Currently tests Ruby, PHP, Java, Python, Perl and C++
 
 ## Usage
 

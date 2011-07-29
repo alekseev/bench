@@ -96,7 +96,7 @@ langs.each do |name, info|
         unless info[:compile_command].nil?
           puts "Removing compiled test \"#{test.to_s}\" for #{name.to_s}"
           path = dir + '/' + path + test.to_s + info[:exec_ext]
-          system(`rm #{path}`)
+          system("rm #{path}")
         end
       else
         tests[test][name] = '------'

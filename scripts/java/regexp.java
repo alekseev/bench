@@ -14,7 +14,7 @@ public class regexp {
 		} finally {
 			scanner.close();
 		}
-		for (int i = 1; i <= 1000000; i++) {
+		for (int i = 1; i <= 100000; i++) {
 			text.toString().split("[a-z]");
 		}
 	}

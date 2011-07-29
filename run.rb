@@ -5,7 +5,7 @@ dir = Dir.pwd
 
 langs = {
   :ruby => {
-    :exec_prefix => '/usr/bin/env ruby',
+    :exec_command => 'ruby %s.rb',
     :script_ext => '.rb',
     :exec_ext => '.rb',
     :version => {
@@ -15,7 +15,7 @@ langs = {
     :time => 0
   },
   :php => {
-    :exec_prefix => '/usr/bin/env php',
+    :exec_command => 'php %s.php',
     :script_ext => '.php',
     :exec_ext => '.php',
     :version => {
@@ -25,9 +25,10 @@ langs = {
     :time => 0
   },
   :java => {
-    :exec_prefix => '/usr/bin/env java',
-    :script_ext => '.class',
-    :exec_ext => '',
+    :exec_command => 'java %s',
+    :compile_command => 'javac %s.java',
+    :script_ext => '.java',
+    :exec_ext => '.class',
     :version => {
       :command => '', # 'java -version',
       :regexp => /java\sversion\s\"(\d{1})\.(\d{1})\.(\d{1})_(\d{1,3})\"/
@@ -35,7 +36,7 @@ langs = {
     :time => 0
   },
   :python => {
-    :exec_prefix => '/usr/bin/env python',
+    :exec_command => 'python %s_test.py',
     :script_ext => '_test.py',
     :exec_ext => '_test.py',
     :version => {
@@ -45,12 +46,23 @@ langs = {
     :time => 0
   },
   :perl => {
-    :exec_prefix => '/usr/bin/env perl',
+    :exec_command => 'perl %s.pl',
     :script_ext => '.pl',
     :exec_ext => '.pl',
     :version => {
       :command => 'perl -v',
       :regexp => /v(\d{1})\.(\d{1,2})\.(\d{1})/
+    },
+    :time => 0
+  },
+  :cpp => {
+    :exec_command => './%s.o',
+    :compile_command => 'g++ -o %s_test.o %s_test.cpp',
+    :script_ext => '_test.cpp',
+    :exec_ext => '_test.o',
+    :version => {
+      :command => '',
+      :regexp => nil
     },
     :time => 0
   }
@@ -71,12 +83,21 @@ langs.each do |name, info|
       file = test.to_s + info[:exec_ext]
       if File.exists? dir + '/' + path + test.to_s + info[:script_ext]
         Dir.chdir(dir + '/' + path)
+        unless File.exists? dir + '/' + path + test.to_s + info[:exec_ext]
+          puts "Compiling test \"#{test.to_s}\" for #{name.to_s}"
+          system(info[:compile_command].gsub(/%s/, test.to_s))
+        end
         puts "Running test \"#{test.to_s}\" with #{name.to_s}"
         time = Time.now
-        `#{info[:exec_prefix]} #{file}`
+        system(info[:exec_command].gsub(/%s/, test.to_s))
         time = (Time.now - time).to_f
         tests[test][name] = time
         langs[name][:time] += time
+        unless info[:compile_command].nil?
+          puts "Removing compiled test \"#{test.to_s}\" for #{name.to_s}"
+          path = dir + '/' + path + test.to_s + info[:exec_ext]
+          system(`rm #{path}`)
+        end
       else
         tests[test][name] = '------'
       end
